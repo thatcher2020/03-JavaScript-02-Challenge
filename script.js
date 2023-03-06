@@ -4,23 +4,34 @@ var lowercase = "abcdefghijklmnopqrstuvwxyz"
 var uppercase = lowercase.toLocaleUpperCase
 var special = "!@#$%"
 var numeric = "123456789"
+var passwordoptions = []
 
-// Write password to the #password input
-function writePassword() {
-  var password = generatePassword();
-  var passwordText = document.querySelector("#password");
-
-  passwordText.value = password;
-
+function randomInt(min, max) {
+  if (!max) {
+    max = min
+    min = 0
+  }
+  var rand = Math.random()
+  return Math.floor(min * (1 - rand) + rand * max)
 }
-// only works if add return
+
+function getRandoItem(list) {
+  return list[randomInt(list.length)]
+}
+
 function generatePassword() {
-  var finalpwd = ""
-  var size = prompt("enter 8 to 128 characters")
-  
 
+  var userInput = window.prompt("How many characters would you like?")
 
-  // then do validations, if i am doing checking
+  var passwordLength = parseInt(userInput)
+  //Check to ensure a number is being entered.
+  if (isNaN(passwordLength)) {
+    alert("That's not a number!")
+    //User returned for NaN.
+    return null;
+  }
+
+  // then do validations, and making sure its between 8 and 128
 
   if (size >= 8 && size <= 128) {
     var isLowercase = confirm("include lowercase?")
@@ -35,24 +46,28 @@ function generatePassword() {
     var isNumeric = confirm("include numeric?")
     console.log(isNumeric)
 
-    if (lowercase === true) {
-      var PositionString = Math.floor(math.random(35) * 26)
-      console.log(PositionString)
-      finalpwd = finalpdw + lowercase[PositionString]
-      console.log(finalpwd)
+    if (passwordLength < 8 || passwordLength > 128) {
+      alert("Must enter a number between 8 and 128 characters")
+      return null;
     }
-// use a let to define display?
-    function display(display) {
-      var passwordText = document.querySelector("#password");
-      passwordText.value = display;
-      return display;
+    var generatedPassword = ""
+
+    for (var i = 0; i < passwordLength; i++) {
+      var randoList = getRandoItem(passwordOptions)
+      var randoChar = getRandoItem(randoList)
+      generatedPassword += randoChar
     }
-  } 
-  else {
-    alert("invalid entry")
+
+    return generatedPassword
   }
 
-  return finalpwd
-}
-// Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
+
+  //Password going to text box
+  function writePassword() {
+    var password = generatePassword();
+    var passwordText = document.querySelector("#password")
+
+    passwordText.value = password;
+  }
+  // Add event listener to generate button
+  generateBtn.addEventListener("click", writePassword);
